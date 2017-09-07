@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.wishfie.feedexample.ApiInterface.ApiClient;
@@ -41,11 +42,12 @@ public class MainActivity extends Activity {
     LinearLayoutManager mLayoutManager;
     Toolbar toolbar;
     ImageView toolbar_sort;
-    TextView toolbar_title;
+    TextView toolbar_title, txError;
     RecyclerView recyclerView;
     List<FeedListModel> ytVideosItems = new ArrayList<>();
     FeedItemsAdapter feedItemsAdapter;
     AlertDialog rtAlertDialog;
+    ProgressBar progressBar;
     CharSequence[] values = {"default", "likes", "views", "shares"};
 
     @SuppressLint("NewApi")
@@ -59,6 +61,8 @@ public class MainActivity extends Activity {
         toolbar_title = (TextView) findViewById(R.id.toolbar_title);
         toolbar_sort = (ImageView) findViewById(R.id.toolbar_sort);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        txError = (TextView) findViewById(R.id.txError);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -100,6 +104,7 @@ public class MainActivity extends Activity {
 
                 int statusCode = response.code();
                 Log.e(TAG, String.valueOf(statusCode));
+                txError.setVisibility(View.GONE);
 
                 FeedModel ytVideos = response.body();
                 Remember.putString(FXConstants.NEXT_PAGE_TOKEN, String.valueOf(ytVideos.getPage()));
@@ -111,6 +116,8 @@ public class MainActivity extends Activity {
             @Override
             public void onFailure(Call<FeedModel> call, Throwable t) {
                 Log.e(TAG, String.valueOf(t));
+                progressBar.setVisibility(View.GONE);
+                txError.setVisibility(View.VISIBLE);
             }
         });
     }
