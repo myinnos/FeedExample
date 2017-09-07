@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="timeago-3.0.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.marlonlom/timeago/3.0.1/81e1b16b4b0402ebf8bcbb86d341205cd2f0dd27/timeago-3.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.marlonlom/timeago/3.0.1/6aa17ac5085ce3602aab5e5f9dde585d14502b0f/timeago-3.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.gradle/caches/modules-2/files-2.1/com.facebook.rebound/rebound/0.3.8/c8b90640dddaf1e7ad75d7cb00b09a44b3788f7e/rebound-0.3.8.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="c8b90640dddaf1e7ad75d7cb00b09a44b3788f7e">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/rebound-0.3.8_bb188b231504847b8ab391f016d3ed8f0fcbe453.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.6.0/98476622f10715998eacf9240d6b479f12c66143/okio-1.6.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="98476622f10715998eacf9240d6b479f12c66143">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/okio-1.6.0_0a5d1c4f65cf64c1650578eeefe1e10328e04aa4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/converter-gson/2.0.2/f8d87f15b94b8d74e7ccf61d7eedb558811cdb30/converter-gson-2.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="f8d87f15b94b8d74e7ccf61d7eedb558811cdb30">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/converter-gson-2.0.2_bcb9e7dbd786e466cd66c02183449a4d0a10fb0c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/picasso-2.5.2_d25167875d2f8c5543b516b66d6ba29a5b7e7c3a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/gson-2.7_75983f9415311fc15591237ba20d6519601860a6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.2.0/f7873a2ebde246a45c2a8d6f3247108b4c88a879/okhttp-3.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="f7873a2ebde246a45c2a8d6f3247108b4c88a879">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/okhttp-3.2.0_30b7648ef875912849b3930a084ddaa05db1fb8e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.gradle/caches/modules-2/files-2.1/com.github.marlonlom/timeago/3.0.1/81e1b16b4b0402ebf8bcbb86d341205cd2f0dd27/timeago-3.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="81e1b16b4b0402ebf8bcbb86d341205cd2f0dd27">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/timeago-3.0.1_42e69f3baf48864118d7d49a2abe05cf1069103b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.android/build-cache/051e46b4c86244575fccab86ade27f65dc1b2215/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="914f5d3e3ace66080e59613708f06d129a222e25">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/classes_8a9ea7b94bab7701dfe9f32dc31f86ee303f986b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/teamdev/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/retrofit/2.0.2/43eeae0b9fb087bb3194ba59ab63a38a32fbf3e/retrofit-2.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.0"
+        sha1="043eeae0b9fb087bb3194ba59ab63a38a32fbf3e">
+        <dex dex="/Users/teamdev/AndroidStudioProjects/FeedExample/app/build/intermediates/pre-dexed/debug/retrofit-2.0.2_6411cc74e05fb7fef824682fd776e2dc8c96004a.jar" />
+    </item>
+
+</items>
