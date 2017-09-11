@@ -2,36 +2,21 @@ package com.wishfie.feedexample.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by myinnos on 07/09/17.
  */
 
-public class FeedListModel {
-    @SerializedName("id")
-    private String id;
-    @SerializedName("thumbnail_image")
-    private String thumbnail_image;
-    @SerializedName("event_name")
-    private String event_name;
-    @SerializedName("event_timestamp")
-    private int event_timestamp;
-    @SerializedName("views")
-    private int views;
-    @SerializedName("likes")
-    private int likes;
-    @SerializedName("shares")
-    private int shares;
+public class FeedListModelRealm extends RealmObject {
 
-    public FeedListModel(String id, String thumbnail_image,
-                         String event_name, int event_timestamp, int views, int likes, int shares) {
-        this.id = id;
-        this.thumbnail_image = thumbnail_image;
-        this.event_name = event_name;
-        this.event_timestamp = event_timestamp;
-        this.views = views;
-        this.likes = likes;
-        this.shares = shares;
-    }
+    private String id;
+    private String thumbnail_image;
+    private String event_name;
+    private int event_timestamp;
+    private int views;
+    private int likes;
+    private int shares;
 
     public String getId() {
         return id;

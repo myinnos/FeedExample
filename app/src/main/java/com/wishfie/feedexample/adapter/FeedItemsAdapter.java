@@ -16,17 +16,21 @@ import android.widget.TextView;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import com.squareup.picasso.Picasso;
 import com.wishfie.feedexample.R;
+import com.wishfie.feedexample.controller.RealmController;
 import com.wishfie.feedexample.functions.RecyclerViewAnimator;
 import com.wishfie.feedexample.model.FeedListModel;
+import com.wishfie.feedexample.model.FeedListModelRealm;
 
 import java.util.List;
 
-public class FeedItemsAdapter extends RecyclerView.Adapter<FeedItemsAdapter.MovieViewHolder> {
+import io.realm.Realm;
 
-    private List<FeedListModel> feedListModelList;
+public class FeedItemsAdapter extends RealmRecyclerViewAdapter<FeedListModelRealm> {
+
     private int rowLayout;
     private Activity activity;
     private RecyclerViewAnimator mAnimator;
+    private Realm realm;
 
     public static class MovieViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
@@ -43,9 +47,7 @@ public class FeedItemsAdapter extends RecyclerView.Adapter<FeedItemsAdapter.Movi
         }
     }
 
-    public FeedItemsAdapter(List<FeedListModel> feedListModelList,
-                            int rowLayout, Activity activity, RecyclerView recyclerView) {
-        this.feedListModelList = feedListModelList;
+    public FeedItemsAdapter(int rowLayout, Activity activity, RecyclerView recyclerView) {
         this.rowLayout = rowLayout;
         this.activity = activity;
         mAnimator = new RecyclerViewAnimator(recyclerView);
@@ -62,27 +64,32 @@ public class FeedItemsAdapter extends RecyclerView.Adapter<FeedItemsAdapter.Movi
         return new MovieViewHolder(view);
     }
 
-
     @Override
-    public void onBindViewHolder(final MovieViewHolder holder, final int position) {
-        holder.heading.setText(feedListModelList.get(position).getEvent_name());
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+
+        realm = RealmController.getInstance().getRealm();
+        final FeedListModelRealm feedListModelList = getItem(position);
+        // cast the generic view holder to our specific one
+        final MovieViewHolder holder = (MovieViewHolder) viewHolder;
+
+        holder.heading.setText(feedListModelList.getEvent_name());
 
         // Converting timestamp into x ago format
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
-                Long.parseLong(String.valueOf(feedListModelList.get(position).getEvent_timestamp())),
+                Long.parseLong(String.valueOf(feedListModelList.getEvent_timestamp())),
                 System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
         holder.timeStamp.setText(timeAgo.toString());
         //holder.timeStamp.setText(getTimeAgo(feedListModelList.get(position).getEvent_timestamp()));
 
         holder.txLikes.setText(String.format("%s Likes",
-                String.valueOf(feedListModelList.get(position).getLikes())));
+                String.valueOf(feedListModelList.getLikes())));
         holder.txViews.setText(String.format("%s Views",
-                String.valueOf(feedListModelList.get(position).getViews())));
+                String.valueOf(feedListModelList.getViews())));
         holder.txShares.setText(String.format("%s Shares",
-                String.valueOf(feedListModelList.get(position).getShares())));
+                String.valueOf(feedListModelList.getShares())));
 
         Picasso.with(activity)
-                .load(feedListModelList.get(position).getThumbnail_image())
+                .load(feedListModelList.getThumbnail_image())
                 .into(holder.imageView);
 
         /**
@@ -91,38 +98,12 @@ public class FeedItemsAdapter extends RecyclerView.Adapter<FeedItemsAdapter.Movi
         mAnimator.onBindViewHolder(holder.itemView, position);
     }
 
-    @Override
+
     public int getItemCount() {
-        return feedListModelList.size();
-    }
 
-    /*
-      returns the time in - how much time ago
-   */
-    public static String getTimeAgo(long milsec) {
-        String timeAgo = "";
-
-        if (milsec < 0) {
-            milsec = milsec + 18180000;
+        if (getRealmAdapter() != null) {
+            return getRealmAdapter().getCount();
         }
-
-        if (milsec <= 60000) {
-            timeAgo = "Few Seconds ago";
-        } else if (milsec <= 3600000) {
-            long timeinMin = milsec / (1000 * 60);
-            timeAgo = String.valueOf(timeinMin) + " Minutes ago";
-        } else if (milsec <= 86400000) {
-            long timeinHr = milsec / (1000 * 3600);
-            timeAgo = String.valueOf(timeinHr) + " Hours ago";
-        } else if (milsec <= 86400000 * 24) {
-
-            long timeinDay = milsec / (1000 * 3600 * 24);
-            timeAgo = String.valueOf(timeinDay) + " Days ago";
-        } else {
-            long timeinMonth = milsec / (1000 * 3600 * 24 * 30);
-            timeAgo = String.valueOf(timeinMonth).replace("-", "") + " Months ago";
-        }
-
-        return timeAgo;
+        return 0;
     }
 }

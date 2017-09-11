@@ -19,12 +19,15 @@ import com.wishfie.feedexample.ApiInterface.ApiClient;
 import com.wishfie.feedexample.ApiInterface.ApiInterface;
 import com.wishfie.feedexample.R;
 import com.wishfie.feedexample.adapter.FeedItemsAdapter;
+import com.wishfie.feedexample.adapter.RealmFeedsAdapter;
+import com.wishfie.feedexample.controller.RealmController;
 import com.wishfie.feedexample.functions.InfiniteScrollRecycler.InfiniteScrollProvider;
 import com.wishfie.feedexample.functions.InfiniteScrollRecycler.OnLoadMoreListener;
 import com.wishfie.feedexample.functions.Remember;
 import com.wishfie.feedexample.functions.FXConstants;
 import com.wishfie.feedexample.functions.FXHelperClass;
 import com.wishfie.feedexample.model.FeedListModel;
+import com.wishfie.feedexample.model.FeedListModelRealm;
 import com.wishfie.feedexample.model.FeedModel;
 
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,17 +49,21 @@ public class MainActivity extends Activity {
     ImageView toolbar_sort;
     TextView toolbar_title, txError;
     RecyclerView recyclerView;
-    List<FeedListModel> ytVideosItems = new ArrayList<>();
+    ArrayList<FeedListModelRealm> ytVideosItems = new ArrayList<>();
     FeedItemsAdapter feedItemsAdapter;
     AlertDialog rtAlertDialog;
     ProgressBar progressBar;
     CharSequence[] values = {"default", "likes", "views", "shares"};
+    private Realm realm;
 
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //get realm instance
+        this.realm = RealmController.with(this).getRealm();
 
         InfiniteScrollProvider infiniteScrollProvider = new InfiniteScrollProvider();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -67,11 +76,21 @@ public class MainActivity extends Activity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        feedItemsAdapter = new FeedItemsAdapter(ytVideosItems,
-                R.layout.feed_item, this, recyclerView);
-
+        feedItemsAdapter = new FeedItemsAdapter(R.layout.feed_item, this, recyclerView);
         recyclerView.setAdapter(feedItemsAdapter);
-        setRecycleView("");
+
+        if (!Remember.getBoolean(FXConstants.DATA_PRE_LOADED, false)) {
+            setRecycleView("");
+        }
+
+        // refresh the realm instance
+        RealmController.with(this).refresh();
+        // get all persisted objects
+        // create the helper adapter and notify data set changes
+        // changes will be reflected automatically
+        setRealmAdapter(RealmController.with(this).getFeeds());
+
+        //recyclerView.setAdapter(feedItemsAdapter);
 
         infiniteScrollProvider.attach(recyclerView, new OnLoadMoreListener() {
             @Override
@@ -84,6 +103,15 @@ public class MainActivity extends Activity {
         toolbar_title.setText("Feed Example");
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
+    }
+
+    public void setRealmAdapter(RealmResults<FeedListModelRealm> feedListModelRealms) {
+
+        RealmFeedsAdapter realmAdapter = new RealmFeedsAdapter(
+                this.getApplicationContext(), feedListModelRealms, true);
+        // Set the data and tell the RecyclerView to draw
+        feedItemsAdapter.setRealmAdapter(realmAdapter);
+        feedItemsAdapter.notifyDataSetChanged();
     }
 
     public void setRecycleView(String nextPageToken) {
@@ -107,9 +135,34 @@ public class MainActivity extends Activity {
                 txError.setVisibility(View.GONE);
 
                 FeedModel ytVideos = response.body();
+
+                FeedListModelRealm feedListModel = new FeedListModelRealm();
+
+                for (int i = 0; i < ytVideos.getPosts().size(); i++) {
+                    feedListModel = new FeedListModelRealm();
+                    feedListModel.setId(ytVideos.getPosts().get(i).getId());
+                    feedListModel.setEvent_name(ytVideos.getPosts().get(i).getEvent_name());
+                    feedListModel.setEvent_timestamp(ytVideos.getPosts().get(i).getEvent_timestamp());
+                    feedListModel.setLikes(ytVideos.getPosts().get(i).getLikes());
+                    feedListModel.setShares(ytVideos.getPosts().get(i).getShares());
+                    feedListModel.setViews(ytVideos.getPosts().get(i).getViews());
+                    feedListModel.setThumbnail_image(ytVideos.getPosts().get(i).getThumbnail_image());
+                    ytVideosItems.add(feedListModel);
+                }
+
                 Remember.putString(FXConstants.NEXT_PAGE_TOKEN, String.valueOf(ytVideos.getPage()));
 
-                ytVideosItems.addAll(response.body().getPosts());
+                //ytVideosItems.addAll(response.body().getPosts());
+                //feedItemsAdapter.notifyDataSetChanged();
+
+                for (FeedListModelRealm b : ytVideosItems) {
+                    // Persist your data easily
+                    realm.beginTransaction();
+                    realm.copyToRealm(b);
+                    realm.commitTransaction();
+                }
+
+                Remember.putBoolean(FXConstants.DATA_PRE_LOADED, true);
                 feedItemsAdapter.notifyDataSetChanged();
             }
 
@@ -143,9 +196,9 @@ public class MainActivity extends Activity {
                             case 0:
                                 break;
                             case 1:
-                                Collections.sort(ytVideosItems, new Comparator<FeedListModel>() {
+                                Collections.sort(ytVideosItems, new Comparator<FeedListModelRealm>() {
                                     @Override
-                                    public int compare(FeedListModel lhs, FeedListModel rhs) {
+                                    public int compare(FeedListModelRealm lhs, FeedListModelRealm rhs) {
                                         return String.valueOf(lhs.getLikes()).compareTo(String.valueOf(rhs.getLikes()));
                                     }
                                 });
@@ -154,9 +207,9 @@ public class MainActivity extends Activity {
                                 break;
                             case 2:
 
-                                Collections.sort(ytVideosItems, new Comparator<FeedListModel>() {
+                                Collections.sort(ytVideosItems, new Comparator<FeedListModelRealm>() {
                                     @Override
-                                    public int compare(FeedListModel lhs, FeedListModel rhs) {
+                                    public int compare(FeedListModelRealm lhs, FeedListModelRealm rhs) {
                                         return String.valueOf(lhs.getViews()).compareTo(String.valueOf(rhs.getViews()));
                                     }
                                 });
@@ -164,9 +217,9 @@ public class MainActivity extends Activity {
                                 feedItemsAdapter.notifyDataSetChanged();
                                 break;
                             case 3:
-                                Collections.sort(ytVideosItems, new Comparator<FeedListModel>() {
+                                Collections.sort(ytVideosItems, new Comparator<FeedListModelRealm>() {
                                     @Override
-                                    public int compare(FeedListModel lhs, FeedListModel rhs) {
+                                    public int compare(FeedListModelRealm lhs, FeedListModelRealm rhs) {
                                         return String.valueOf(lhs.getShares()).compareTo(String.valueOf(rhs.getShares()));
                                     }
                                 });
